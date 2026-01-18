@@ -1,0 +1,189 @@
+﻿  camera.cpp
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(5,18): error C2511: 'glm::vec3::vec3(float)': overloaded member function not found in 'glm::vec3'
+  (compiling source file 'Camera/camera.cpp')
+      C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(4,12):
+      see declaration of 'glm::vec3'
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(5,46): error C2550: 'glm::vec3::{ctor}': constructor initializer lists are only allowed on constructor definitions
+  (compiling source file 'Camera/camera.cpp')
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(11,51): error C3861: 'length': identifier not found
+  (compiling source file 'Camera/camera.cpp')
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\gtx_transform.hpp(3,29): error C2084: function 'glm::mat4 glm::translate(const glm::mat4 &,const glm::vec3 &)' already has a body
+  (compiling source file 'Camera/camera.cpp')
+      C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(19,17):
+      see previous definition of 'glm::translate'
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Camera\camera.cpp(67,71): error C2440: '<function-style-cast>': cannot convert from 'float' to 'glm::mat4'
+      C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Camera\camera.cpp(67,71):
+      'glm::mat4::mat4': no overloaded function could convert all the argument types
+          C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(9,103):
+          could be 'glm::mat4::mat4(glm::mat4 &&)'
+              C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Camera\camera.cpp(67,71):
+              'glm::mat4::mat4(glm::mat4 &&)': cannot convert argument 1 from 'float' to 'glm::mat4 &&'
+                  C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Camera\camera.cpp(67,72):
+                  Reason: cannot convert from 'float' to 'glm::mat4'
+          C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(9,103):
+          or       'glm::mat4::mat4(const glm::mat4 &)'
+              C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Camera\camera.cpp(67,71):
+              'glm::mat4::mat4(const glm::mat4 &)': cannot convert argument 1 from 'float' to 'const glm::mat4 &'
+                  C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Camera\camera.cpp(67,72):
+                  Reason: cannot convert from 'float' to 'const glm::mat4'
+          C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Camera\camera.cpp(67,71):
+          while trying to match the argument list '(float)'
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Camera\camera.cpp(67,110): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
+      C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Camera\camera.cpp(67,110):
+      'glm::vec4::vec4': function does not take 2 arguments
+          C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Camera\camera.cpp(67,110):
+          while trying to match the argument list '(glm::vec3, int)'
+  
+  window.cpp
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(23,2): error C3861: 'glfwTerminate': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(28,7): error C3861: 'glfwInit': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(42,3): error C3861: 'glfwTerminate': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(46,2): error C3861: 'glfwMakeContextCurrent': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(50,2): error C3861: 'glfwSetWindowUserPointer': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(51,2): error C3861: 'glfwSetKeyCallback': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(52,2): error C3861: 'glfwSetMouseButtonCallback': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(53,2): error C3861: 'glfwSetCursorPosCallback': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(55,6): error C3861: 'glewInit': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(55,20): error C2065: 'GLEW_OK': undeclared identifier
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(64,41): error C2065: 'GL_VERSION': undeclared identifier
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(64,29): error C3861: 'glGetString': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(64,12): error C2593: 'operator <<' is ambiguous
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(480,39):
+      could be 'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::basic_streambuf<char,std::char_traits<char>> *)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(448,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(const void *)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(430,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(long double)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(412,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(double)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(394,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(float)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(376,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned __int64)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(358,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(__int64)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(340,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned long)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(322,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(long)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(303,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned int)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(277,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(int)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(258,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned short)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(224,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(short)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(206,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(bool)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(200,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::ios_base &(__cdecl *)(std::ios_base &))'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(194,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::basic_ios<char,std::char_traits<char>> &(__cdecl *)(std::basic_ios<char,std::char_traits<char>> &))'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(189,39):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::basic_ostream<char,std::char_traits<char>> &(__cdecl *)(std::basic_ostream<char,std::char_traits<char>> &))'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(688,32):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::operator <<<char,std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const char *)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(732,32):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::operator <<<char,std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,char)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(768,31):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const char *)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(813,31):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,char)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(930,31):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const signed char *)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(936,31):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,signed char)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(941,31):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const unsigned char *)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(947,31):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,unsigned char)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_ostream.hpp(1031,32):
+      or       'std::basic_ostream<char,std::char_traits<char>> &std::operator <<<char,std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const std::error_code &)'
+      C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(64,12):
+      while trying to match the argument list '(std::basic_ostream<char,std::char_traits<char>>, <error type>)'
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(70,2): error C3861: 'glfwGetFramebufferSize': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(71,2): error C3861: 'glViewport': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(77,10): error C2065: 'GL_COLOR_BUFFER_BIT': undeclared identifier
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(77,32): error C2065: 'GL_DEPTH_BUFFER_BIT': undeclared identifier
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(77,2): error C3861: 'glClear': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(132,27): error C3861: 'glfwGetWindowUserPointer': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(134,16): error C2065: 'GLFW_RELEASE': undeclared identifier
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(143,26): error C3861: 'glfwGetWindowUserPointer': identifier not found
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(145,16): error C2065: 'GLFW_RELEASE': undeclared identifier
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Graphics\window.cpp(154,26): error C3861: 'glfwGetWindowUserPointer': identifier not found
+  main.cpp
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(5,18): error C2511: 'glm::vec3::vec3(float)': overloaded member function not found in 'glm::vec3'
+  (compiling source file 'main.cpp')
+      C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(4,12):
+      see declaration of 'glm::vec3'
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(5,46): error C2550: 'glm::vec3::{ctor}': constructor initializer lists are only allowed on constructor definitions
+  (compiling source file 'main.cpp')
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(11,51): error C3861: 'length': identifier not found
+  (compiling source file 'main.cpp')
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\gtx_transform.hpp(3,29): error C2084: function 'glm::mat4 glm::translate(const glm::mat4 &,const glm::vec3 &)' already has a body
+  (compiling source file 'main.cpp')
+      C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(19,17):
+      see previous definition of 'glm::translate'
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\main.cpp(87,28): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
+  meshLoaderObj.cpp
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(5,18): error C2511: 'glm::vec3::vec3(float)': overloaded member function not found in 'glm::vec3'
+  (compiling source file 'Model%20Loading/meshLoaderObj.cpp')
+      C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(4,12):
+      see declaration of 'glm::vec3'
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(5,46): error C2550: 'glm::vec3::{ctor}': constructor initializer lists are only allowed on constructor definitions
+  (compiling source file 'Model%20Loading/meshLoaderObj.cpp')
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(11,51): error C3861: 'length': identifier not found
+  (compiling source file 'Model%20Loading/meshLoaderObj.cpp')
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(87,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(95,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(99,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(108,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(112,36): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(121,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(125,36): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(129,36): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(137,55): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(139,40): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(139,40): warning C4267:         with
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(139,40): warning C4267:         [
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(139,40): warning C4267:             _Ty=int
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(139,40): warning C4267:         ]
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(144,40): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(144,40): warning C4267:         with
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(144,40): warning C4267:         [
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(144,40): warning C4267:             _Ty=int
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(144,40): warning C4267:         ]
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(145,40): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(145,40): warning C4267:         with
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(145,40): warning C4267:         [
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(145,40): warning C4267:             _Ty=int
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\meshLoaderObj.cpp(145,40): warning C4267:         ]
+  mesh.cpp
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(5,18): error C2511: 'glm::vec3::vec3(float)': overloaded member function not found in 'glm::vec3'
+  (compiling source file 'Model%20Loading/mesh.cpp')
+      C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(4,12):
+      see declaration of 'glm::vec3'
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(5,46): error C2550: 'glm::vec3::{ctor}': constructor initializer lists are only allowed on constructor definitions
+  (compiling source file 'Model%20Loading/mesh.cpp')
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\glm.hpp(11,51): error C3861: 'length': identifier not found
+  (compiling source file 'Model%20Loading/mesh.cpp')
+  
+C:\University 3rd year\GameEngine2025\GameEngine2025\GameEngine\GameEngine\Model Loading\mesh.cpp(50,43): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  texture.cpp
+  Generating Code...

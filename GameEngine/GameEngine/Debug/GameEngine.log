@@ -1,0 +1,5 @@
+﻿  camera.cpp
+  main.cpp
+C:\University 3rd year\Maw-a-father-s-quest\GameEngine\GameEngine\main.cpp(146,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+  GameEngine.vcxproj -> C:\University 3rd year\Maw-a-father-s-quest\GameEngine\Debug\GameEngine.exe
