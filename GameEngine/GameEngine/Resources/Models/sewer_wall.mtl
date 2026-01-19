@@ -1,0 +1,11 @@
+# Created with Anim8or 1.00
+# Object "CaveWalls3":
+
+newmtl CaveWalls3
+Ka 0.208 0.208 0.208
+Kd 0.467 0.467 0.467
+Ks 0.239 0.239 0.239
+Ns 738.6
+map_Kd CaveWalls3_Base_Diffuse.png
+map_Ks CaveWalls3_Base_Specular.png
+

@@ -19,11 +19,12 @@ struct GameObject
 {
 	glm::vec3 pos;
 	glm::vec3 scale;
+	float yaw = 0.0f;
 	glm::vec3 velocity;
 	float health;
 	bool active;
 	bool attacking;
-	float attackTimer; // reused for per-rat attack cooldown and projectile lifetime
+	float attackTimer; 
 	float attackCooldown;
 	int type;
 };
@@ -39,12 +40,19 @@ Camera camera;
 bool checkCollision(const GameObject& a, const GameObject& b)
 {
 	if (!a.active || !b.active) return false;
+	const float wallPadding = 0.5f;
 
 	// Simple box collision
 	float a_half_x = a.scale.x * 0.5f;
-	float a_half_z = a.scale.z * 0.5f; 
+	float a_half_z = a.scale.z * 0.5f;
 	float b_half_x = b.scale.x * 0.5f;
 	float b_half_z = b.scale.z * 0.5f;
+	if (a.type == 10 || b.type == 10) {
+		a_half_x += wallPadding;
+		a_half_z += wallPadding;
+		b_half_x += wallPadding;
+		b_half_z += wallPadding;
+	}
 
 	bool collisionX = std::abs(a.pos.x - b.pos.x) < (a_half_x + b_half_x);
 	bool collisionZ = std::abs(a.pos.z - b.pos.z) < (a_half_z + b_half_z);
@@ -58,10 +66,20 @@ void resolveOverlap(GameObject &a, GameObject &b)
     if (!a.active || !b.active) return;
     if (!checkCollision(a, b)) return;
 
+	const bool aIsWall = (a.type == 10);
+	const bool bIsWall = (b.type == 10);
+	const float wallPadding = 0.5f;
+
     float a_half_x = a.scale.x * 0.5f;
     float a_half_z = a.scale.z * 0.5f;
     float b_half_x = b.scale.x * 0.5f;
     float b_half_z = b.scale.z * 0.5f;
+	if (aIsWall || bIsWall) {
+		a_half_x += wallPadding;
+		a_half_z += wallPadding;
+		b_half_x += wallPadding;
+		b_half_z += wallPadding;
+	}
 
     float dx = a.pos.x - b.pos.x;
     float dz = a.pos.z - b.pos.z;
@@ -75,26 +93,38 @@ void resolveOverlap(GameObject &a, GameObject &b)
     if (overlapX < overlapZ) {
         float sign = (dx >= 0.0f) ? 1.0f : -1.0f;
         float move = overlapX + 0.001f;
-        // if one is player (type 0) move only the other
-        if (a.type == 0) {
-            b.pos.x -= sign * move;
-        } else if (b.type == 0) {
-            a.pos.x += sign * move;
-        } else {
-            a.pos.x += sign * (move * 0.5f);
-            b.pos.x -= sign * (move * 0.5f);
-        }
+		if (aIsWall && !bIsWall) {
+			b.pos.x -= sign * move;
+		} else if (bIsWall && !aIsWall) {
+			a.pos.x += sign * move;
+		} else {
+			// if one is player (type 0) move only the other
+			if (a.type == 0) {
+				b.pos.x -= sign * move;
+			} else if (b.type == 0) {
+				a.pos.x += sign * move;
+			} else {
+				a.pos.x += sign * (move * 0.5f);
+				b.pos.x -= sign * (move * 0.5f);
+			}
+		}
     } else {
         float sign = (dz >= 0.0f) ? 1.0f : -1.0f;
         float move = overlapZ + 0.001f;
-        if (a.type == 0) {
-            b.pos.z -= sign * move;
-        } else if (b.type == 0) {
-            a.pos.z += sign * move;
-        } else {
-            a.pos.z += sign * (move * 0.5f);
-            b.pos.z -= sign * (move * 0.5f);
-        }
+		if (aIsWall && !bIsWall) {
+			b.pos.z -= sign * move;
+		} else if (bIsWall && !aIsWall) {
+			a.pos.z += sign * move;
+		} else {
+			if (a.type == 0) {
+				b.pos.z -= sign * move;
+			} else if (b.type == 0) {
+				a.pos.z += sign * move;
+			} else {
+				a.pos.z += sign * (move * 0.5f);
+				b.pos.z -= sign * (move * 0.5f);
+			}
+		}
     }
 }
 int main()
@@ -114,6 +144,8 @@ int main()
     Texture t_rat; t_rat.id = loadBMP("Resources/Textures/mouse.bmp"); t_rat.type = "texture_diffuse";
     Texture t_cat; t_cat.id = loadBMP("Resources/Textures/cat_color.bmp"); t_cat.type = "texture_diffuse";
     Texture t_green_attack; t_green_attack.id = loadBMP("Resources/Textures/green_attack.bmp"); t_green_attack.type = "texture_diffuse";
+    Texture t_cat_attack; t_cat_attack.id = loadBMP("Resources/Textures/cat_attack_texture.bmp"); t_cat_attack.type = "texture_diffuse";
+	Texture t_sewer_walls; t_sewer_walls.id = loadBMP("Resources/Textures/sewer_walls.bmp"); t_sewer_walls.type = "texture_diffuse";
 
     std::vector<Texture> texWood = { t_wood };
     std::vector<Texture> texRock = { t_rock };
@@ -128,6 +160,8 @@ int main()
 	Mesh water = loader.loadObj("Resources/Models/plane1.obj", texWater);
     Mesh ratMesh = loader.loadObj("Resources/Models/rat.obj", texRat);
     Mesh greenSphere = loader.loadObj("Resources/Models/sphere.obj", { t_green_attack });
+    Mesh furBall = loader.loadObj("Resources/Models/fur_ball.obj", { t_cat_attack });
+	Mesh sewerWall = loader.loadObj("Resources/Models/sewer_wall.obj", { t_sewer_walls });
     Mesh catMesh = loader.loadObj("Resources/Models/cat.obj", texCat);
 
 	GameState state = SEWERS;
@@ -140,11 +174,8 @@ int main()
 	player.type = 0;
 
 	// maw's attack
-	bool attackInProgress = false;
-	float attackTimer = 0.0f;
-	const float attackDuration = 0.5f; 
-	const float attackHitTime = 0.25f; 
-	bool attackHitApplied = false;
+	float catShootCooldown = 1.2f;
+	float catShootTimer = catShootCooldown;
 
 	// maw orientation 
 	float playerYaw = 10350.0f; // start cat rotated 180 degrees
@@ -152,12 +183,33 @@ int main()
 	// entity vectors
 	std::vector<GameObject> enemies;
 	std::vector<GameObject> projectiles;
-	std::vector<GameObject> attackCubes;
+	std::vector<GameObject> furProjectiles;
+	std::vector<GameObject> sewerWalls;
 	std::vector<GameObject> obstacles;
 	std::vector<GameObject> items;
 
+	{
+		const float sideOffset = 12.0f / 1.5f;
+		const int segments = 16;
+		const float segmentSpacing = 7.0f;
+		const float y = 0.0f;
+		const float zStart = player.pos.z;
+		for (int i = 0; i < segments; ++i) {
+			float z = zStart - i * segmentSpacing;
+
+			GameObject wl; wl.pos = glm::vec3(player.pos.x - sideOffset, y, z); wl.scale = glm::vec3(6.0f, 6.0f, 6.0f) / 50.0f; wl.active = true; wl.type = 10;
+			wl.yaw = 5500.0f;
+			GameObject wr; wr.pos = glm::vec3(player.pos.x + sideOffset, y, z); wr.scale = glm::vec3(6.0f, 6.0f, 6.0f) / 50.0f; wr.active = true; wr.type = 10;
+			wr.yaw = 5500.0f;
+
+			sewerWalls.push_back(wl);
+			sewerWalls.push_back(wr);
+		}
+	}
+
 	//enemy spawn - place rats in a small non-overlapping radius around p
 	auto spawnRat = [&](glm::vec3 p) {
+		const float corridorHalfWidth = (12.0f / 1.5f) - 0.8f;
 		const float spawnRadius = 3.0f;
 		const int maxAttempts = 30;
 		GameObject g;
@@ -165,7 +217,7 @@ int main()
 		g.health = 40.0f;
 		g.active = true;
 		g.attacking = false;
-        g.attackCooldown = 3.0f;
+		g.attackCooldown = 2.0f;
         g.attackTimer = g.attackCooldown; // start with cooldown
 		g.type = 1;
 		bool placed = false;
@@ -173,8 +225,10 @@ int main()
 			float rx = ((rand() % 1000) / 1000.0f) * 2.0f * spawnRadius - spawnRadius;
 			float rz = ((rand() % 1000) / 1000.0f) * 2.0f * spawnRadius - spawnRadius;
 			glm::vec3 candidate = glm::vec3(p.x + rx, p.y, p.z + rz);
+			if (state == SEWERS) {
+				candidate.x = glm::clamp(candidate.x, player.pos.x - corridorHalfWidth, player.pos.x + corridorHalfWidth);
+			}
 			g.pos = candidate;
-			// check against other enemies/obstacles/items
 			bool coll = false;
 			for (auto &ex : enemies) { if (checkCollision(g, ex)) { coll = true; break; } }
 			for (auto &ob : obstacles) { if (!coll && checkCollision(g, ob)) { coll = true; break; } }
@@ -216,6 +270,15 @@ int main()
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+
+		static float camYaw = 0.0f;
+		static float camPitch = -15.0f;
+		const float camRotSpeed = 500.0f;
+		if (window.isPressed(GLFW_KEY_LEFT)) camYaw += camRotSpeed * deltaTime;
+		if (window.isPressed(GLFW_KEY_RIGHT)) camYaw -= camRotSpeed * deltaTime;
+		if (window.isPressed(GLFW_KEY_UP)) camPitch += camRotSpeed * deltaTime;
+		if (window.isPressed(GLFW_KEY_DOWN)) camPitch -= camRotSpeed * deltaTime;
+		camPitch = glm::clamp(camPitch, -80.0f, 20.0f);
 
     // spawn rats 5 seconds after the player first moves, in waves: 2,2,3,1,2 (total 10)
     static std::vector<int> ratWaves = {2,2,3,1,2};
@@ -274,100 +337,42 @@ int main()
 			std::cout << "Player yaw: " << playerYaw << std::endl;
 		}
 
-		// Camera Rotation
-		if (window.isPressed(GLFW_KEY_LEFT)) camera.rotateOy(50.0f * deltaTime);
-		if (window.isPressed(GLFW_KEY_RIGHT)) camera.rotateOy(-50.0f * deltaTime);
-		if (window.isPressed(GLFW_KEY_UP)) camera.rotateOx(50.0f * deltaTime);
-		if (window.isPressed(GLFW_KEY_DOWN)) camera.rotateOx(-50.0f * deltaTime);
-		// Make camera follow the player (third-person)
-		// Keep camera fixed on the world plane (do not rotate offset with player yaw)
-		glm::vec3 camOffset = glm::vec3(0.0f, 2.0f, 6.0f); // world-space offset (x, y, z)
-	static glm::vec3 camUserOffset = glm::vec3(0.0f); // user-controlled camera offset
-	glm::vec3 camPos = glm::vec3(player.pos.x + camOffset.x + camUserOffset.x, camOffset.y + camUserOffset.y, player.pos.z + camOffset.z + camUserOffset.z);
-	camera.setPosition(camPos);
-		camera.lookAt(player.pos + glm::vec3(0.0f, 0.5f, 0.0f));
+		glm::vec3 camTarget = player.pos + glm::vec3(0.0f, 0.5f, 0.0f);
+		glm::vec3 baseOffset(0.0f, 2.0f, 6.0f);
+		glm::mat4 rot = glm::rotate(glm::mat4(1.0f), glm::radians(camYaw), glm::vec3(0.0f, 1.0f, 0.0f));
+		rot = glm::rotate(rot, glm::radians(camPitch), glm::vec3(1.0f, 0.0f, 0.0f));
+		glm::vec3 camPos = camTarget + glm::vec3(rot * glm::vec4(baseOffset, 1.0f));
+		camera.setPosition(camPos);
+		camera.lookAt(camTarget);
 
 		// Combat (Space to Attack)
 		static bool prevSpacePressed = false;
 		bool currentSpacePressed = window.isPressed(GLFW_KEY_SPACE);
-		// Start attack
-		if (currentSpacePressed && !prevSpacePressed && !attackInProgress) {
-			attackInProgress = true;
-			attackTimer = 0.0f;
-			attackHitApplied = false;
-			std::cout << "Attack started" << std::endl;
+		catShootTimer += deltaTime;
+		if (currentSpacePressed && !prevSpacePressed && catShootTimer >= catShootCooldown) {
+			catShootTimer = 0.0f;
 
-        // spawn cat attack cubes: 1 front line (3) and 2 diagonals (3 each)
-        {
-            // create a rotation matrix for the cat's yaw so we can place cubes in the cat's local forward space
-            glm::mat4 rot = glm::rotate(glm::mat4(1.0f), glm::radians(playerYaw), glm::vec3(0.0f, 1.0f, 0.0f));
+			glm::mat4 rot = glm::rotate(glm::mat4(1.0f), glm::radians(playerYaw), glm::vec3(0.0f, 1.0f, 0.0f));
+			glm::vec3 baseDir = glm::normalize(glm::vec3(rot * glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)));
+			glm::vec3 rightDir = glm::normalize(glm::cross(baseDir, glm::vec3(0.0f, 1.0f, 0.0f)));
 
-            // helper to transform a local offset to world space and spawn a cube
-            auto spawnLocalCube = [&](glm::vec3 localOffset, float scale, float life) {
-                glm::vec4 worldOff = rot * glm::vec4(localOffset, 1.0f);
-                GameObject c; c.pos = player.pos + glm::vec3(worldOff.x, worldOff.y, worldOff.z);
-                c.scale = glm::vec3(scale);
-                c.active = true; c.attacking = false; c.attackTimer = life; c.type = 9;
-                attackCubes.push_back(c);
-            };
+			auto spawnFurProjectile = [&](const glm::vec3& dir) {
+				GameObject p;
+				p.pos = player.pos + glm::vec3(0.0f, 0.5f, 0.0f) + dir * 0.8f;
+				p.velocity = dir * 9.0f;
+				p.scale = glm::vec3(0.009f);
+				p.active = true;
+				p.attacking = false;
+				p.attackTimer = 2.0f;
+				p.type = 9;
+				furProjectiles.push_back(p);
+			};
 
-            // front line (local Z is forward)
-            float frontZ = -1.4f; // in local space negative Z is forward in model
-            for (int i = -1; i <= 1; ++i) {
-                glm::vec3 local = glm::vec3((float)i * 0.5f, 0.3f, frontZ);
-                spawnLocalCube(local, 0.25f, 0.6f);
-            }
-
-            // diagonals on left and right (in local space)
-            for (int side = -1; side <= 1; side += 2) {
-                for (int i = 0; i < 3; ++i) {
-                    float fd = -(0.8f + i * 0.6f); // forward (negative Z)
-                    float rd = (1.0f + i * 0.6f) * (float)side; // right offset
-                    glm::vec3 local = glm::vec3(rd, 0.3f, fd);
-                    spawnLocalCube(local, 0.2f, 0.6f);
-                }
-            }
-        }
+			spawnFurProjectile(baseDir);
+			spawnFurProjectile(glm::normalize(baseDir + rightDir * 0.45f));
+			spawnFurProjectile(glm::normalize(baseDir - rightDir * 0.45f));
 		}
 		prevSpacePressed = currentSpacePressed;
-
-	
-		const float attackRange = 3.0f;
-		const float attackDamage = 40.0f;
-		if (attackInProgress) {
-			attackTimer += deltaTime;
-			if (!attackHitApplied && attackTimer >= attackHitTime) {
-				for (auto& e : enemies) {
-					if (!e.active) continue;
-					float dx = player.pos.x - e.pos.x;
-					float dz = player.pos.z - e.pos.z;
-					float dist = std::sqrt(dx * dx + dz * dz);
-					if (dist < attackRange) {
-						e.health -= attackDamage;
-						if (e.health <= 0) e.active = false;
-						std::cout << "Hit enemy at dist=" << dist << " newHealth=" << e.health << std::endl;
-					}
-				}
-
-				// cat attack cubes damage enemies
-				for (auto& c : attackCubes) if (c.active) {
-					for (auto& e : enemies) if (e.active) {
-						if (checkCollision(c, e)) {
-							e.health -= 50.0f; // strong hit
-							e.active = (e.health > 0.0f);
-							c.active = false; // cube consumed
-						}
-					}
-				}
-				attackHitApplied = true;
-			}
-			if (attackTimer >= attackDuration) {
-				attackInProgress = false;
-				attackTimer = 0.0f;
-				attackHitApplied = false;
-				std::cout << "Attack ended" << std::endl;
-			}
-		}
 
 		// Rat AI: chase player, melee when close, and spit projectiles when at range
 		{
@@ -424,24 +429,34 @@ int main()
 			if (p.attackTimer <= 0.0f) p.active = false;
 		}
 
-		// Update attack cubes: countdown and collision with enemies
-		for (auto& c : attackCubes) if (c.active) {
-			c.attackTimer -= deltaTime;
-			for (auto& e : enemies) if (e.active) {
-				if (checkCollision(c, e)) {
-					e.health -= 50.0f;
-					if (e.health <= 0.0f) e.active = false;
-					c.active = false; // consumed
+		for (auto& f : furProjectiles) if (f.active) {
+			f.pos += f.velocity * deltaTime;
+			f.attackTimer -= deltaTime;
+			for (auto& e : enemies) if (e.active && e.type == 1) {
+				if (checkCollision(f, e)) {
+					e.active = false;
+					f.active = false;
 					break;
 				}
 			}
-			if (c.attackTimer <= 0.0f) c.active = false;
+			if (f.attackTimer <= 0.0f) f.active = false;
 		}
 
 		// Resolve overlaps between enemies so they don't stack
 		for (size_t i = 0; i < enemies.size(); ++i) {
 			for (size_t j = i + 1; j < enemies.size(); ++j) {
 				resolveOverlap(enemies[i], enemies[j]);
+			}
+		}
+
+		// Prevent entities from passing through sewer walls
+		if (state == SEWERS) {
+			for (auto& w : sewerWalls) if (w.active) {
+				resolveOverlap(player, w);
+				for (auto& e : enemies) if (e.active) {
+					if (e.type == 0) resolveOverlap(e, w);
+					else resolveOverlap(w, e);
+				}
 			}
 		}
 
@@ -549,9 +564,12 @@ int main()
 		glUniform3f(glGetUniformLocation(shader.getId(), "lightPos"), 0.0f, 50.0f, 0.0f);
 		glm::vec3 camP = camera.getCameraPosition();
 		glUniform3f(glGetUniformLocation(shader.getId(), "viewPos"), camP.x, camP.y, camP.z);
-		auto DrawMesh = [&](Mesh& m, glm::vec3 pos, glm::vec3 s) {
+		auto DrawMesh = [&](Mesh& m, glm::vec3 pos, glm::vec3 s, float yawDeg = 0.0f) {
 			glm::mat4 Model = glm::mat4(1.0f);
 			Model = glm::translate(Model, pos);
+			if (yawDeg != 0.0f) {
+				Model = glm::rotate(Model, glm::radians(yawDeg), glm::vec3(0.0f, 1.0f, 0.0f));
+			}
 			Model = glm::scale(Model, s);
 			glm::mat4 MVP = Projection * View * Model;
 			glUniformMatrix4fv(glGetUniformLocation(shader.getId(), "MVP"), 1, GL_FALSE, &MVP[0][0]);
@@ -561,33 +579,15 @@ int main()
 			};
 
 		if (player.active) {
-			if (attackInProgress) {
-				
-				float t = attackTimer / attackDuration; 
-				float swing = -4.0f * (t - 0.5f) * (t - 0.5f) + 1.0f;
-			// do not move the cat vertically during attack; only apply a small forward/back offset
-			glm::vec3 attackOffset = glm::vec3(0.0f, 0.0f, -0.3f * swing);
-				glm::vec3 attackScale = player.scale * (1.0f + 0.1f * swing);
-				glm::mat4 Model = glm::mat4(1.0f);
-				Model = glm::translate(Model, player.pos + attackOffset);
-				Model = glm::rotate(Model, glm::radians(playerYaw), glm::vec3(0.0f, 1.0f, 0.0f));
-				Model = glm::scale(Model, attackScale);
-				glm::mat4 MVP = Projection * View * Model;
-				glUniformMatrix4fv(glGetUniformLocation(shader.getId(), "MVP"), 1, GL_FALSE, &MVP[0][0]);
-				glUniformMatrix4fv(glGetUniformLocation(shader.getId(), "model"), 1, GL_FALSE, &Model[0][0]);
-				glUniform1i(glGetUniformLocation(shader.getId(), "useTexture"), 1);
-				catMesh.draw(shader);
-			} else {
-				glm::mat4 idleModel = glm::mat4(1.0f);
-				idleModel = glm::translate(idleModel, player.pos);
-				idleModel = glm::rotate(idleModel, glm::radians(playerYaw), glm::vec3(0.0f, 1.0f, 0.0f));
-				idleModel = glm::scale(idleModel, player.scale);
-				glm::mat4 idleMVP = Projection * View * idleModel;
-				glUniformMatrix4fv(glGetUniformLocation(shader.getId(), "MVP"), 1, GL_FALSE, &idleMVP[0][0]);
-				glUniformMatrix4fv(glGetUniformLocation(shader.getId(), "model"), 1, GL_FALSE, &idleModel[0][0]);
-				glUniform1i(glGetUniformLocation(shader.getId(), "useTexture"), 1);
-				catMesh.draw(shader);
-			}
+			glm::mat4 idleModel = glm::mat4(1.0f);
+			idleModel = glm::translate(idleModel, player.pos);
+			idleModel = glm::rotate(idleModel, glm::radians(playerYaw), glm::vec3(0.0f, 1.0f, 0.0f));
+			idleModel = glm::scale(idleModel, player.scale);
+			glm::mat4 idleMVP = Projection * View * idleModel;
+			glUniformMatrix4fv(glGetUniformLocation(shader.getId(), "MVP"), 1, GL_FALSE, &idleMVP[0][0]);
+			glUniformMatrix4fv(glGetUniformLocation(shader.getId(), "model"), 1, GL_FALSE, &idleModel[0][0]);
+			glUniform1i(glGetUniformLocation(shader.getId(), "useTexture"), 1);
+			catMesh.draw(shader);
 		}
 
 		if (state == SEWERS) {
@@ -613,10 +613,14 @@ int main()
         for (auto& p : projectiles) if (p.active) {
             DrawMesh(greenSphere, p.pos, p.scale);
         }
-        // draw attack cubes
-        for (auto& c : attackCubes) if (c.active) {
-            DrawMesh(cube, c.pos, c.scale);
-        }
+		for (auto& f : furProjectiles) if (f.active) {
+			DrawMesh(furBall, f.pos, f.scale);
+		}
+		if (state == SEWERS) {
+			for (auto& w : sewerWalls) if (w.active) {
+				DrawMesh(sewerWall, w.pos, w.scale, w.yaw);
+			}
+		}
         for (auto& o : obstacles) if (o.active) DrawMesh(cube, o.pos, o.scale);
         for (auto& i : items) if (i.active) {
             if (i.type == 7) DrawMesh(catMesh, i.pos, i.scale); else DrawMesh(cube, i.pos, i.scale);
