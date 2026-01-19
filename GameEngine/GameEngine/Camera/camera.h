@@ -28,6 +28,10 @@ class Camera
 		glm::vec3 getCameraViewDirection();
 		glm::vec3 getCameraUp();
 
+	// setters to control camera externally
+	void setPosition(const glm::vec3& pos);
+	void lookAt(const glm::vec3& target);
+
 		void keyboardMoveFront(float cameraSpeed);
 		void keyboardMoveBack(float cameraSpeed);
 		void keyboardMoveLeft(float cameraSpeed);
