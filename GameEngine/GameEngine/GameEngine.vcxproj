@@ -78,6 +78,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -97,6 +98,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -118,6 +120,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera\camera.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_tables.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Graphics\window.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model Loading\meshLoaderObj.cpp" />
@@ -127,6 +135,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\camera.h" />
+    <ClInclude Include="Dependencies\imgui\imgui.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_internal.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
     <ClInclude Include="Graphics\window.h" />
     <ClInclude Include="Model Loading\meshLoaderObj.h" />
     <ClInclude Include="Model Loading\mesh.h" />
@@ -154,8 +170,12 @@
     <Image Include="Resources\Textures\orange.bmp" />
     <Image Include="Resources\Textures\rock.bmp" />
     <Image Include="Resources\Textures\sewer_walls.bmp" />
-    <Image Include="Resources\Textures\sewer_walls.png" />
     <Image Include="Resources\Textures\wood.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="Resources\Models\sphere.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

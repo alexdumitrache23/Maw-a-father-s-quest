@@ -13,51 +13,25 @@ GLuint loadBMP(const char * imagepath) {
 	unsigned char * data;
 
 	FILE * file;
-    errno_t err = fopen_s(&file, imagepath, "rb");
-    if (err)
-    {
-        printf("%s could not be opened. Creating fallback white texture.\n", imagepath);
-        // Create simple 1x1 white texture
-        GLuint texID;
-        glGenTextures(1, &texID);
-        glBindTexture(GL_TEXTURE_2D, texID);
-        unsigned char white[3] = { 255,255,255 };
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, white);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        return texID;
-    }
+	errno_t err = fopen_s(&file, imagepath, "rb");
+	if (err)
+	{
+		printf("%s could not be opened.", imagepath); getchar(); return 0;
+	}
 
-    if (fread(header, 1, 54, file) != 54) {
-        printf("Not a correct BMP file (too small)\n");
-        // fallback: create simple 1x1 white texture
-        fclose(file);
-        GLuint texID;
-        glGenTextures(1, &texID);
-        glBindTexture(GL_TEXTURE_2D, texID);
-        unsigned char white[3] = { 255,255,255 };
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, white);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        return texID;
-    }
+	if (fread(header, 1, 54, file) != 54) {
+		printf("Not a correct BMP file\n");
+		return 0;
+	}
 
-    // Parsing BMP file
-    if (header[0] != 'B' || header[1] != 'M') {
-        printf("Not a correct BMP file (header mismatch)\n");
-        fclose(file);
-        GLuint texID;
-        glGenTextures(1, &texID);
-        glBindTexture(GL_TEXTURE_2D, texID);
-        unsigned char white[3] = { 255,255,255 };
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, white);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        return texID;
-    }
+	// Parsing BMP file
+	if (header[0] != 'B' || header[1] != 'M') {
+		printf("Not a correct BMP file\n");
+		return 0;
+	}
 
-    if (*(int*)&(header[0x1E]) != 0) { printf("Not a correct BMP file (planes)\n"); fclose(file); GLuint texID; glGenTextures(1,&texID); glBindTexture(GL_TEXTURE_2D,texID); unsigned char white[3]={255,255,255}; glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,1,1,0,GL_RGB,GL_UNSIGNED_BYTE,white); glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); return texID; }
-    if (*(int*)&(header[0x1C]) != 24) { printf("Not a correct BMP file (not 24bpp)\n"); fclose(file); GLuint texID; glGenTextures(1,&texID); glBindTexture(GL_TEXTURE_2D,texID); unsigned char white[3]={255,255,255}; glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,1,1,0,GL_RGB,GL_UNSIGNED_BYTE,white); glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); return texID; }
+	if (*(int*)&(header[0x1E]) != 0) { printf("Not a correct BMP file\n");    return 0; }
+	if (*(int*)&(header[0x1C]) != 24) { printf("Not a correct BMP file\n");    return 0; }
 
 	dataPos = *(int*)&(header[0x0A]);
 	imageSize = *(int*)&(header[0x22]);
