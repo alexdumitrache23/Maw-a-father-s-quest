@@ -1,37 +1,48 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\",
+  "WorkspaceRootPath": "D:\\Maw-A-Father-s-Quest\\GameEngine\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Graphics\\window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Shaders\\water_fragment_shader.glsl||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Shaders\\water_fragment_shader.glsl||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Shaders\\water_vertex_shader.glsl||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Shaders\\water_vertex_shader.glsl||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include\\vector||{3B902123-F8A7-4915-9F01-361F908088D0}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Graphics\\window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Graphics\\window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Camera\\camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Camera\\camera.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_opengl3.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_opengl3.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Dependencies\\imgui\\imgui_impl_opengl3.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_glfw.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_glfw.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Dependencies\\imgui\\imgui_impl_glfw.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|solutionrelative:GameEngine\\Dependencies\\imgui\\imgui.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GAMEENGINE\\DEPENDENCIES\\IMGUI\\IMGUI.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|D:\\Maw-A-Father-s-Quest\\GameEngine\\GAMEENGINE\\DEPENDENCIES\\IMGUI\\IMGUI.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7DB4A041-6210-429F-8FF3-63462ADD6A69}|GameEngine\\GameEngine.vcxproj|solutionrelative:GAMEENGINE\\DEPENDENCIES\\IMGUI\\IMGUI.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -42,7 +53,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -55,101 +66,132 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "water_fragment_shader.glsl",
+              "DocumentMoniker": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Shaders\\water_fragment_shader.glsl",
+              "RelativeDocumentMoniker": "GameEngine\\Shaders\\water_fragment_shader.glsl",
+              "ToolTip": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Shaders\\water_fragment_shader.glsl",
+              "RelativeToolTip": "GameEngine\\Shaders\\water_fragment_shader.glsl",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAAwDIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-01-21T01:06:26.459Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "vector",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include\\vector",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include\\vector",
+              "ViewState": "AgIAAHYHAAAAAAAAAAAtwIkHAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-01-20T23:24:31.396Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "water_vertex_shader.glsl",
+              "DocumentMoniker": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Shaders\\water_vertex_shader.glsl",
+              "RelativeDocumentMoniker": "GameEngine\\Shaders\\water_vertex_shader.glsl",
+              "ToolTip": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Shaders\\water_vertex_shader.glsl",
+              "RelativeToolTip": "GameEngine\\Shaders\\water_vertex_shader.glsl",
+              "ViewState": "AgIAABQAAAAAAAAAAAAAwDwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-01-20T22:16:25.458Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "window.cpp",
-              "DocumentMoniker": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Graphics\\window.cpp",
+              "DocumentMoniker": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Graphics\\window.cpp",
               "RelativeDocumentMoniker": "GameEngine\\Graphics\\window.cpp",
-              "ToolTip": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Graphics\\window.cpp",
+              "ToolTip": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Graphics\\window.cpp",
               "RelativeToolTip": "GameEngine\\Graphics\\window.cpp",
               "ViewState": "AgIAABYAAAAA+v////8AwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-01-20T19:23:32.575Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-20T19:23:32.575Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "main.cpp",
-              "DocumentMoniker": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\main.cpp",
+              "DocumentMoniker": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\main.cpp",
               "RelativeDocumentMoniker": "GameEngine\\main.cpp",
-              "ToolTip": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\main.cpp",
+              "ToolTip": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\main.cpp",
               "RelativeToolTip": "GameEngine\\main.cpp",
-              "ViewState": "AgIAAF8CAAAAAAAAAAA4vWcCAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAJcCAAAAAAAAAAAiwLsCAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-01-20T18:54:55.396Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "camera.h",
-              "DocumentMoniker": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.h",
+              "DocumentMoniker": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.h",
               "RelativeDocumentMoniker": "GameEngine\\Camera\\camera.h",
-              "ToolTip": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.h",
+              "ToolTip": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.h",
               "RelativeToolTip": "GameEngine\\Camera\\camera.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-01-20T19:23:25.693Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "camera.cpp",
-              "DocumentMoniker": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.cpp",
-              "RelativeDocumentMoniker": "GameEngine\\Camera\\camera.cpp",
-              "ToolTip": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.cpp",
-              "RelativeToolTip": "GameEngine\\Camera\\camera.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-01-20T19:23:19.653Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "imgui_impl_opengl3.cpp",
-              "DocumentMoniker": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_opengl3.cpp",
-              "RelativeDocumentMoniker": "GameEngine\\Dependencies\\imgui\\imgui_impl_opengl3.cpp",
-              "ToolTip": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_opengl3.cpp",
-              "RelativeToolTip": "GameEngine\\Dependencies\\imgui\\imgui_impl_opengl3.cpp",
-              "ViewState": "AgIAAKQAAAAAAAAAAAAEwLQAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-01-20T19:18:40.322Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-20T19:23:25.693Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "imgui.cpp",
-              "DocumentMoniker": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui.cpp",
-              "RelativeDocumentMoniker": "GameEngine\\Dependencies\\imgui\\imgui.cpp",
-              "ToolTip": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui.cpp",
-              "RelativeToolTip": "GameEngine\\Dependencies\\imgui\\imgui.cpp",
-              "ViewState": "AgIAAKEUAAAAAAAAAAAEwLEUAAAUAAAAAAAAAA==",
+              "Title": "camera.cpp",
+              "DocumentMoniker": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.cpp",
+              "RelativeDocumentMoniker": "GameEngine\\Camera\\camera.cpp",
+              "ToolTip": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Camera\\camera.cpp",
+              "RelativeToolTip": "GameEngine\\Camera\\camera.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-01-20T19:10:22.602Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "imgui_impl_glfw.cpp",
-              "DocumentMoniker": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_glfw.cpp",
-              "RelativeDocumentMoniker": "GameEngine\\Dependencies\\imgui\\imgui_impl_glfw.cpp",
-              "ToolTip": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_glfw.cpp",
-              "RelativeToolTip": "GameEngine\\Dependencies\\imgui\\imgui_impl_glfw.cpp",
-              "ViewState": "AgIAAGoAAAAAAAAAAAAEwHoAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-01-20T19:11:55.511Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-20T19:23:19.653Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
+              "Title": "imgui_impl_opengl3.cpp",
+              "DocumentMoniker": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_opengl3.cpp",
+              "RelativeDocumentMoniker": "GameEngine\\Dependencies\\imgui\\imgui_impl_opengl3.cpp",
+              "ToolTip": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_opengl3.cpp",
+              "RelativeToolTip": "GameEngine\\Dependencies\\imgui\\imgui_impl_opengl3.cpp",
+              "ViewState": "AgIAAKQAAAAAAAAAAAAEwLQAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-20T19:18:40.322Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "imgui.cpp",
+              "DocumentMoniker": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui.cpp",
+              "RelativeDocumentMoniker": "GameEngine\\Dependencies\\imgui\\imgui.cpp",
+              "ToolTip": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui.cpp",
+              "RelativeToolTip": "GameEngine\\Dependencies\\imgui\\imgui.cpp",
+              "ViewState": "AgIAAKEUAAAAAAAAAAAEwLEUAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-20T19:10:22.602Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "imgui_impl_glfw.cpp",
+              "DocumentMoniker": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_glfw.cpp",
+              "RelativeDocumentMoniker": "GameEngine\\Dependencies\\imgui\\imgui_impl_glfw.cpp",
+              "ToolTip": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui_impl_glfw.cpp",
+              "RelativeToolTip": "GameEngine\\Dependencies\\imgui\\imgui_impl_glfw.cpp",
+              "ViewState": "AgIAAGoAAAAAAAAAAAAEwHoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-20T19:11:55.511Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "imgui.h",
-              "DocumentMoniker": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui.h",
+              "DocumentMoniker": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui.h",
               "RelativeDocumentMoniker": "GameEngine\\Dependencies\\imgui\\imgui.h",
-              "ToolTip": "C:\\University 3rd year\\Maw-a-father-s-quest-Alex\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui.h",
+              "ToolTip": "D:\\Maw-A-Father-s-Quest\\GameEngine\\GameEngine\\Dependencies\\imgui\\imgui.h",
               "RelativeToolTip": "GameEngine\\Dependencies\\imgui\\imgui.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAEMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
