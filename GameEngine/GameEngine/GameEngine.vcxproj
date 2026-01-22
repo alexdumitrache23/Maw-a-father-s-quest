@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\Asphalt.bmp" />
+    <Image Include="Resources\Textures\car.bmp" />
     <Image Include="Resources\Textures\cat_attack_texture.bmp" />
     <Image Include="Resources\Textures\cat_color.bmp" />
     <Image Include="Resources\Textures\dirty_water.bmp" />
@@ -169,7 +170,9 @@
     <Image Include="Resources\Textures\mouse.bmp" />
     <Image Include="Resources\Textures\orange.bmp" />
     <Image Include="Resources\Textures\rock.bmp" />
+    <Image Include="Resources\Textures\rock1.bmp" />
     <Image Include="Resources\Textures\sewer_walls.bmp" />
+    <Image Include="Resources\Textures\sky.bmp" />
     <Image Include="Resources\Textures\wood.bmp" />
   </ItemGroup>
   <ItemGroup>

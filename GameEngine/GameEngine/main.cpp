@@ -8,6 +8,7 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <cstring>
 #include <glew.h>
 #include <glfw3.h>
 #include <glm.hpp>
@@ -36,7 +37,7 @@ struct GameObject
 	bool isHeld = false;
 };
 
-enum GameState { MENU, STORY_SCREEN, SEWERS, STREET, MEN_LASAGNA, KEY_PUZZLE, BOSS_RESCUE, GAME_OVER };
+enum GameState { MENU, STORY_SCREEN, SEWERS, STREET, MEN_LASAGNA, KEY_PUZZLE, BOSS_RESCUE, WIN_SCREEN, GAME_OVER };
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -108,6 +109,8 @@ void resolveOverlap(GameObject& a, GameObject& b)
 			else if (b.type == 0) a.pos.x += sign * move;
 			else { a.pos.x += sign * move * 0.5f; b.pos.x -= sign * move * 0.5f; }
 		}
+
+
 	}
 	else {
 		float sign = (dz >= 0.0f) ? 1.0f : -1.0f;
@@ -141,11 +144,10 @@ int main()
 
 	// --- Load Textures ---
 	Texture t_wood; t_wood.id = loadBMP("Resources/Textures/wood.bmp"); t_wood.type = "texture_diffuse";
-	Texture t_rock; t_rock.id = loadBMP("Resources/Textures/rock.bmp"); t_rock.type = "texture_diffuse";
+	Texture t_rock; t_rock.id = loadBMP("Resources/Textures/rock1.bmp"); t_rock.type = "texture_diffuse";
 	Texture t_orange; t_orange.id = loadBMP("Resources/Textures/orange.bmp"); t_orange.type = "texture_diffuse";
 
-	
-	Texture t_dirty_water; t_dirty_water.id = loadBMP("Resources/Textures/dirty_water.bmp"); t_dirty_water.type = "texture_diffuse";
+	Texture t_dirty_water; t_dirty_water.id = loadBMP("Resources/Textures/rock1.bmp"); t_dirty_water.type = "texture_diffuse";
 
 	Texture t_rat; t_rat.id = loadBMP("Resources/Textures/mouse.bmp"); t_rat.type = "texture_diffuse";
 	Texture t_cat; t_cat.id = loadBMP("Resources/Textures/cat_color.bmp"); t_cat.type = "texture_diffuse";
@@ -153,7 +155,7 @@ int main()
 	Texture t_cat_attack; t_cat_attack.id = loadBMP("Resources/Textures/cat_attack_texture.bmp"); t_cat_attack.type = "texture_diffuse";
 	Texture t_sewer_walls; t_sewer_walls.id = loadBMP("Resources/Textures/sewer_walls.bmp"); t_sewer_walls.type = "texture_diffuse";
 	Texture t_sewer_door; t_sewer_door.id = loadBMP("Resources/Textures/sewer_door.bmp"); t_sewer_door.type = "texture_diffuse";
-	Texture t_asphalt; t_asphalt.id = loadBMP("Resources/Textures/Asphalt.bmp"); t_asphalt.type = "texture_diffuse";
+	Texture t_asphalt; t_asphalt.id = loadBMP("Resources/Textures/rock1.bmp"); t_asphalt.type = "texture_diffuse";
 	Texture t_car; t_car.id = loadBMP("Resources/Textures/car.bmp"); t_car.type = "texture_diffuse";
 
 	// Texture vectors for Loading
@@ -185,17 +187,19 @@ int main()
 	// Street Replacement Meshes
 	Mesh streetGroundMesh = loader.loadObj("Resources/Models/plane1.obj", texAsphalt);
 	Mesh carMesh = loader.loadObj("Resources/Models/car.obj", texCar);
+	Mesh hutMesh = loader.loadObj("Resources/Models/hut.obj", texBuilding);
 
 	// Interior / Boss
 	Mesh lasagnaMesh = loader.loadObj("Resources/Models/lasagna.obj", texOrange);
 	Mesh bossMesh = loader.loadObj("Resources/Models/boss.obj", texRat);
+	Mesh cageMesh = loader.loadObj("Resources/Models/cage.obj", texBuilding);
 	Mesh keyMesh = loader.loadObj("Resources/Models/key.obj", texOrange);
 	Mesh boxMesh = loader.loadObj("Resources/Models/storage_box.obj", texWood);
 
 	GameState state = MENU;
 
 	GameObject player;
-	player.pos = glm::vec3(0.0f, 0.5f, 0.0f);
+	player.pos = glm::vec3(0.0f, -5.0f, 0.0f);
 	player.scale = glm::vec3(1.0f);
 	player.health = 100.0f;
 	player.active = true;
@@ -215,6 +219,19 @@ int main()
 	std::vector<GameObject> scenery;
 	GameObject exitDoor;
 	GameObject buildingATarget;
+	GameObject streetHut;
+	GameObject streetHut2;
+	GameObject rescueCat;
+	GameObject pippin;
+	GameObject cage;
+	GameObject streetLasagna;
+	GameObject streetKey;
+	bool streetClearedCars = false;
+	bool streetLasagnaEaten = false;
+	float streetLasagnaBaseYaw = 0.0f;
+	bool bossSpawned = false;
+	bool hasKey = false;
+	bool pippinSaved = false;
 
 	// --- SETUP SEWERS ---
 	{
@@ -235,7 +252,7 @@ int main()
 
 		// NOTE: Changed exitDoor Y position slightly so it isn't underground if pivot is center
 		exitDoor.pos = glm::vec3(player.pos.x, 2.5f, zStart - (segments * segmentSpacing) - 5.0f);
-		exitDoor.scale = glm::vec3(0.5f);
+		exitDoor.scale = glm::vec3(2.0f);
 		exitDoor.active = false;
 		exitDoor.type = 11;
 		exitDoor.yaw = 0.0f;
@@ -263,9 +280,10 @@ int main()
 		GameObject p; p.pos = pos; p.velocity = vel; p.scale = glm::vec3(0.002f); p.active = true; p.attacking = false; p.attackTimer = 3.0f; p.type = 8;
 		projectiles.push_back(p);
 		};
-	auto spawnCar = [&](glm::vec3 p) {
-		GameObject g; g.pos = p; g.scale = glm::vec3(2.5f);
-		g.velocity = glm::vec3(0.0f, 0.0f, 15.0f); // Move along Z
+	auto spawnCar = [&](glm::vec3 p, const glm::vec3& v) {
+		GameObject g; g.pos = p; g.scale = glm::vec3(0.125f);
+		g.velocity = v;
+		g.yaw = glm::degrees(90.0f);
 		g.active = true; g.type = 4;
 		obstacles.push_back(g);
 		};
@@ -285,10 +303,11 @@ int main()
 	std::vector<int> ratWaves = { 2,2,3,1,2 };
 	int currentWaveIndex = 0;
 	float waveTimer = 0.0f;
-	const float waveInterval = 5.0f;
+	const float waveInterval = 2.0f;
 	const int totalRatsToSpawn = 10;
 	int totalSpawned = 0;
 	bool sewerLevelComplete = false;
+	bool prevFPressed = false;
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -320,12 +339,35 @@ int main()
 			ImGui::End();
 		}
 		else if (state == STORY_SCREEN) {
+			static const char* fullStoryText =
+				"Maw was a stray cat which had a little kitten named Pippin.\n\n"
+				"While they were hanging out at the back door of an italian restaurant where they were plotting to steal some lasagna, the cat catchers ambushed them.\n\n"
+				"Maw managed to flee, but his kitten was captured by the bad guys and taken to the animal center.\n\n"
+				"While running Maw falls down in a sewer.\n\n"
+				"He goes in the adventure to save his kitten.";
+			static int visibleChars = 0;
+			static float typeTimer = 0.0f;
+			static GameState prevStoryState = MENU;
+
+			// Reset typewriter when entering the story screen.
+			if (prevStoryState != STORY_SCREEN) {
+				visibleChars = 0;
+				typeTimer = 0.0f;
+			}
+			prevStoryState = STORY_SCREEN;
+
+			const float charsPerSecond = 45.0f;
+			typeTimer += deltaTime;
+			int targetChars = (int)(typeTimer * charsPerSecond);
+			int totalChars = (int)strlen(fullStoryText);
+			visibleChars = std::min(totalChars, targetChars);
+
 			ImVec2 winSize = ImVec2(io.DisplaySize.x * 0.8f, io.DisplaySize.y * 0.8f);
 			ImGui::SetNextWindowSize(winSize);
 			ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 			ImGui::Begin("Story", NULL, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
 			ImGui::SetWindowFontScale(2.0f);
-			ImGui::TextWrapped("Maw was a stray cat which had a little kitten named Pippin.\n\nWhile they were hanging out at the back door of an italian restaurant where they were plotting to steal some lasagna, the cat catchers ambushed them.\n\nMaw managed to flee, but his kitten was captured by the bad guys and taken to the animal center.\n\nWhile running Maw falls down in a sewer.\n\nHe goes in the adventure to save his kitten.");
+			ImGui::TextWrapped("%.*s", visibleChars, fullStoryText);
 			ImGui::Dummy(ImVec2(0.0f, 50.0f));
 			ImGui::SetCursorPosX((winSize.x - 250) * 0.5f);
 			if (ImGui::Button("Start Adventure", ImVec2(250, 60))) state = SEWERS;
@@ -346,10 +388,28 @@ int main()
 			ImGui::SetCursorPosY(io.DisplaySize.y * 0.6f);
 			if (ImGui::Button("Restart", ImVec2(200, 60))) {
 				player.health = 100.0f;
-				player.pos = glm::vec3(0.0f, 0.5f, 0.0f);
+				player.pos = glm::vec3(0.0f, -5.0f, 0.0f);
 				state = SEWERS;
 				enemies.clear(); projectiles.clear(); items.clear(); obstacles.clear(); scenery.clear();
 				ratsSpawned = false; totalSpawned = 0; currentWaveIndex = 0; waveTimer = 0.0f; playerMoved = false; sewerLevelComplete = false; exitDoor.active = false;
+			}
+			ImGui::End();
+		}
+		else if (state == WIN_SCREEN) {
+			ImGui::SetNextWindowPos(ImVec2(0, 0));
+			ImGui::SetNextWindowSize(io.DisplaySize);
+			ImGui::Begin("Win", NULL, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
+			ImGui::SetWindowFontScale(3.0f);
+			const char* msg = "Congrats! You saved your kitten!";
+			float w = ImGui::CalcTextSize(msg).x;
+			ImGui::SetCursorPosX((io.DisplaySize.x - w) * 0.5f);
+			ImGui::SetCursorPosY(io.DisplaySize.y * 0.45f);
+			ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), msg);
+			ImGui::SetWindowFontScale(1.8f);
+			ImGui::SetCursorPosX((io.DisplaySize.x - 260) * 0.5f);
+			ImGui::SetCursorPosY(io.DisplaySize.y * 0.60f);
+			if (ImGui::Button("Back to Menu", ImVec2(260, 70))) {
+				state = MENU;
 			}
 			ImGui::End();
 		}
@@ -366,26 +426,39 @@ int main()
 				if (sewerLevelComplete) ImGui::Text("SEWERS CLEAR! Find Exit Door & Press 'F'");
 				else ImGui::Text("Task: Defeat 10 Rats (%d/10)", totalSpawned);
 			}
-			else if (state == STREET) ImGui::Text("Task: Avoid Cars & Enter Building A");
-			else if (state == MEN_LASAGNA) ImGui::Text("Task: Defeat Guards & Eat Lasagna");
-			else if (state == KEY_PUZZLE) ImGui::Text("Task: Navigate Maze, Find Key & Press 'F'");
-			else if (state == BOSS_RESCUE) ImGui::Text("Task: Defeat Boss & Save Pippin!");
+			else if (state == STREET) {
+				if (!streetClearedCars) ImGui::Text("Task: Avoid Cars");
+				else if (!streetLasagnaEaten) ImGui::Text("Task: Eat lasagna to heal up (Press 'F')");
+				else {
+					bool bossAlive = false;
+					for (auto& e : enemies) if (e.active && e.type == 3) { bossAlive = true; break; }
+					if (bossAlive) ImGui::Text("Task: Defeat Boss & Save Pippin!");
+					else if (bossSpawned && !hasKey) ImGui::Text("Task: You need a key to open the cage!");
+					else if (bossSpawned) ImGui::Text("Task: Save Pippin");
+					else ImGui::Text("Task: Go fight the boss");
+				}
+			}
+	
+			else if (state == BOSS_RESCUE) {
+				bool bossAlive = false;
+				for (auto& e : enemies) if (e.active && e.type == 3) { bossAlive = true; break; }
+				if (bossAlive) ImGui::Text("Task: Defeat Boss & Save Pippin!");
+				else if (!hasKey) ImGui::Text("Task: You need a key to open the cage!");
+				else ImGui::Text("Task: Save Pippin");
+			}
 			ImGui::End();
 		}
 
-		if (state != MENU && state != STORY_SCREEN && state != GAME_OVER) {
+		if (state != MENU && state != STORY_SCREEN && state != WIN_SCREEN && state != GAME_OVER) {
 
 			if (player.health <= 0.0f) state = GAME_OVER;
 
 			// Lighting
 			if (state == STREET) {
-				dayCycleTimer += deltaTime;
-				if (dayCycleTimer > dayDuration) dayCycleTimer -= dayDuration;
-				float angle = (dayCycleTimer / dayDuration) * 2.0f * PI;
-				sunPos.x = sin(angle) * 60.0f; sunPos.y = cos(angle) * 60.0f; sunPos.z = 0.0f;
-				if (sunPos.y > 20.0f) { sunColor = glm::vec3(1.0f, 1.0f, 0.9f); glClearColor(0.5f, 0.7f, 0.9f, 1.0f); }
-				else if (sunPos.y > 0.0f) { sunColor = glm::vec3(1.0f, 0.5f, 0.2f); glClearColor(0.8f, 0.4f, 0.2f, 1.0f); }
-				else { sunColor = glm::vec3(0.1f, 0.1f, 0.3f); glClearColor(0.0f, 0.0f, 0.1f, 1.0f); }
+				// Simple bright, stable light for STREET (prevents very dark cars).
+				sunPos = player.pos + glm::vec3(0.0f, 25.0f, -10.0f);
+				sunColor = glm::vec3(1.6f, 1.6f, 1.6f);
+				glClearColor(0.55f, 0.75f, 0.95f, 1.0f);
 			}
 			else if (state == SEWERS) {
 				sunPos = player.pos + glm::vec3(0.0f, 1.0f, 0.0f);
@@ -409,7 +482,7 @@ int main()
 			if (window.isPressed(GLFW_KEY_Q)) playerYaw += 5000.0f * deltaTime;
 			if (window.isPressed(GLFW_KEY_E)) playerYaw -= 5000.0f * deltaTime;
 
-			const float camRotSpeed = 500.0f;
+			const float camRotSpeed = 3600.0f;
 			if (window.isPressed(GLFW_KEY_LEFT)) camYaw += camRotSpeed * deltaTime;
 			if (window.isPressed(GLFW_KEY_RIGHT)) camYaw -= camRotSpeed * deltaTime;
 			if (window.isPressed(GLFW_KEY_UP)) camPitch += camRotSpeed * deltaTime;
@@ -453,6 +526,10 @@ int main()
 			}
 			prevSpacePressed = currentSpacePressed;
 
+			bool fPressed = window.isPressed(GLFW_KEY_F);
+			bool fJustPressed = fPressed && !prevFPressed;
+			prevFPressed = fPressed;
+
 			const float ratSpeed = 2.0f;
 			for (auto& e : enemies) {
 				if (!e.active || e.type != 1) continue;
@@ -495,8 +572,18 @@ int main()
 			for (auto& f : furProjectiles) if (f.active) {
 				f.pos += f.velocity * deltaTime;
 				f.attackTimer -= deltaTime;
-				for (auto& e : enemies) if (e.active && e.type == 1) {
-					if (checkCollision(f, e)) { e.active = false; f.active = false; break; }
+				for (auto& e : enemies) if (e.active && (e.type == 1 || e.type == 3)) {
+					if (!checkCollision(f, e)) continue;
+					if (e.type == 1) {
+						e.active = false;
+						f.active = false;
+						break;
+					}
+					// Boss takes 2 hits to kill.
+					e.health -= 1.0f;
+					f.active = false;
+					if (e.health <= 0.0f) e.active = false;
+					break;
 				}
 				if (f.attackTimer <= 0.0f) f.active = false;
 			}
@@ -507,7 +594,7 @@ int main()
 			if (state == SEWERS) {
 				if (playerMoved && !ratsSpawned) {
 					ratsSpawnTimer += deltaTime;
-					if (ratsSpawnTimer >= 5.0f) ratsSpawned = true;
+					if (ratsSpawnTimer >= 1.5f) ratsSpawned = true;
 				}
 				if (ratsSpawned && totalSpawned < totalRatsToSpawn) {
 					waveTimer += deltaTime;
@@ -531,57 +618,202 @@ int main()
 				}
 
 				if (sewerLevelComplete && exitDoor.active) {
-					float d = glm::distance(player.pos, exitDoor.pos);
-					if (d < 5.0f && window.isPressed(GLFW_KEY_F)) {
+					glm::vec2 p2(player.pos.x, player.pos.z);
+					glm::vec2 d2(exitDoor.pos.x, exitDoor.pos.z);
+					float d = glm::distance(p2, d2);
+					if (d < 5.0f && fJustPressed) {
 						state = STREET;
 						enemies.clear();
-						player.pos = glm::vec3(0.0f, 0.5f, 5.0f);
+						items.clear();
+						scenery.clear();
+						obstacles.clear();
+						player.pos = glm::vec3(0.0f, -5.0f, 5.0f);
+					streetClearedCars = false;
+					streetLasagnaEaten = false;
+					streetLasagnaBaseYaw = 0.0f;
+					streetHut = GameObject{};
+					streetHut2 = GameObject{};
+					rescueCat = GameObject{};
+					pippin = GameObject{};
+					cage = GameObject{};
+					bossSpawned = false;
+					streetLasagna = GameObject{};
+					streetKey = GameObject{};
+					hasKey = false;
+					pippinSaved = false;
 
-						// Setup Street
-						for (int i = 0; i < 5; i++) {
-							spawnCar(glm::vec3(4.0f, 0.0f, -30.0f - (i * 20.0f)));
-							spawnCar(glm::vec3(-4.0f, 0.0f, -50.0f - (i * 20.0f)));
-						}
+						// Setup Street: asphalt plane + 2 cars moving left -> right
+						const float carY = -5.0f;
+						const float zLane1 = -20.0f;
+						const float zLane2 = -40.0f;
+						spawnCar(glm::vec3(-30.0f, carY, zLane1), glm::vec3(12.0f, 0.0f, 0.0f));
+						spawnCar(glm::vec3(-60.0f, carY, zLane2), glm::vec3(16.0f, 0.0f, 0.0f));
 
-						// Generate Decorative Buildings (Replacements)
-						for (int i = 0; i < 10; ++i) {
-							GameObject b;
-							b.pos = glm::vec3((i % 2 == 0 ? 15.0f : -15.0f), 0.0f, -i * 20.0f);
-							b.scale = glm::vec3(2.0f); b.active = true; b.type = 99;
+					// Place hut "building" target for STREET.
+					streetHut.pos = glm::vec3(0.0f, -5.0f, -75.0f);
+					streetHut.scale = glm::vec3(1.5f);
+					streetHut.yaw = 180.0f;
+					streetHut.active = true;
+					streetHut.type = 12;
 
-							// Just use a simple box or wall as building placeholder
-							int r = rand() % 3;
-							if (r == 0) b.type = 101;
-							else if (r == 1) b.type = 102;
-							else b.type = 103;
-							scenery.push_back(b);
-						}
+					// Second hut (bigger) for the boss encounter.
+					streetHut2.pos = glm::vec3(0.0f, -5.0f, -160.0f);
+					streetHut2.scale = streetHut.scale;
+					streetHut2.yaw = 180.0f;
+					streetHut2.active = true;
+					streetHut2.type = 12;
 
-						buildingATarget.pos = glm::vec3(0.0f, 0.0f, -200.0f);
-						buildingATarget.scale = glm::vec3(3.0f);
-						buildingATarget.active = true;
+					// Extra rescue cat removed.
+					rescueCat = GameObject{};
+
+					// Pippin and cage inside the boss hut.
+					cage.pos = streetHut2.pos + glm::vec3(4.0f, 0.2f, -5.0f);
+					cage.scale = glm::vec3(0.35f);
+					cage.yaw = 0.0f;
+					cage.active = false;
+					cage.type = 13;
+
+					pippin.pos = cage.pos;
+					pippin.scale = glm::vec3(0.6f);
+					pippin.yaw = 0.0f;
+					pippin.active = false;
+					pippin.type = 14;
+
+					// Place lasagna inside/near hut. Will be activated after clearing cars.
+					// +X = right, +Z = forward.
+					streetLasagna.pos = streetHut.pos + glm::vec3(3.5f, 1.0f, -5.0f);
+					streetLasagna.scale = glm::vec3(0.35f);
+					streetLasagna.yaw = 0.0f;
+					streetLasagna.active = false;
+					streetLasagna.type = 5;
+
+					// Key behind the second hut.
+					streetKey.pos = streetHut2.pos + glm::vec3(0.0f, 1.0f, -18.0f);
+					streetKey.scale = glm::vec3(0.004f);
+					streetKey.yaw = 0.0f;
+					streetKey.active = false;
+					streetKey.type = 6;
+					streetKey.isHeld = false;
 					}
 				}
 			}
 			else if (state == STREET) {
+			// Phase 1: avoid moving cars until player passes them.
+			if (!streetClearedCars) {
+				// When Maw passes beyond the last lane, unlock the "go to building and eat lasagna" phase.
+				if (player.pos.z < -45.0f) {
+					streetClearedCars = true;
+					streetLasagna.active = true;
+					streetKey.active = true;
+				}
+			}
+
+			// Key pickup
+			if (streetClearedCars && streetKey.active && !hasKey) {
+				const float dKey = glm::distance(player.pos, streetKey.pos);
+				if (dKey < 3.0f && fJustPressed) {
+					hasKey = true;
+					streetKey.active = true;
+					streetKey.isHeld = true;
+				}
+			}
+
+			// Carry key: hover on the right side of the cat and follow the player.
+			if (hasKey && streetKey.isHeld) {
+				glm::vec3 right(
+					cos(TO_RAD(playerYaw + 90.0f)),
+					0.0f,
+					sin(TO_RAD(playerYaw + 90.0f))
+				);
+				streetKey.pos = player.pos + glm::vec3(0.0f, 1.0f, 0.0f) + right * 0.8f;
+				streetKey.yaw = playerYaw;
+				streetKey.pos.y += std::sin(glfwGetTime() * 4.0f) * 0.15f;
+			}
+
 				for (auto& o : obstacles) {
-					if (o.type == 4) {
-						o.pos.z += o.velocity.z * deltaTime; // Move along Z
-						if (o.pos.z > 20.0f) o.pos.z = -180.0f; // Loop cars
-						if (checkCollision(player, o)) player.health -= 20.0f * deltaTime;
+					if (!o.active || o.type != 4) continue;
+					o.pos.x += o.velocity.x * deltaTime;
+					if (o.pos.x > 35.0f) o.pos.x = -70.0f;
+				}
+
+			// Start boss encounter when approaching the big hut (stay in STREET).
+			if (streetClearedCars && !bossSpawned) {
+				const float hutDist = glm::distance(player.pos, streetHut2.pos);
+				if (hutDist < 12.0f) {
+					bossSpawned = true;
+					enemies.clear();
+					projectiles.clear();
+					furProjectiles.clear();
+					// Boss spawned in front of the cage.
+					spawnBoss(cage.pos + glm::vec3(0.0f, 1.5f, 6.0f));
+					enemies.back().scale = glm::vec3(1.5f);
+					enemies.back().health = 2.0f;
+					enemies.back().yaw = glm::degrees(90.0f);
+					cage.active = true;
+					pippin.active = true;
+				}
+			}
+
+			// Boss fight + cage unlock logic (kept in STREET).
+			if (bossSpawned) {
+				bool bossDead = true;
+				for (auto& e : enemies) if (e.active && e.type == 3) {
+					bossDead = false;
+					glm::vec3 dir = player.pos - e.pos;
+					float len = std::sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
+					if (len > 0.1f) e.pos += (dir / len) * 2.0f * deltaTime;
+					if (checkCollision(player, e)) player.health -= 20.0f * deltaTime;
+
+					e.attacking = true;
+					e.attackTimer -= deltaTime;
+					if (e.attackTimer <= 0.0f) {
+						float aimLower = 0.5f;
+						float targetY = player.pos.y - aimLower;
+						float dy = targetY - e.pos.y;
+						glm::vec3 shotDir = glm::normalize(glm::vec3(dir.x, dy, dir.z));
+						spawnProjectile(e.pos + glm::vec3(0.0f, 1.2f, 0.0f), shotDir * 7.5f);
+						projectiles.back().scale = glm::vec3(0.004f);
+						e.attackCooldown = 1.6f;
+						e.attackTimer = e.attackCooldown;
 					}
 				}
 
-				float d = glm::distance(player.pos, buildingATarget.pos);
-				if (d < 10.0f) {
-					state = MEN_LASAGNA;
-					obstacles.clear(); scenery.clear();
-					player.pos = glm::vec3(0.0f, 0.5f, 0.0f);
-					spawnMan(glm::vec3(-3.0f, 1.0f, -10.0f));
-					spawnMan(glm::vec3(3.0f, 1.0f, -10.0f));
-					GameObject l; l.pos = glm::vec3(0.0f, 0.5f, -15.0f); l.scale = glm::vec3(2.0f); l.active = true; l.type = 5; l.isHeld = false;
-					items.push_back(l);
+				if (bossDead && cage.active && pippin.active && !pippinSaved) {
+					float dCage = glm::distance(player.pos, cage.pos);
+					if (dCage < 3.0f && fJustPressed) {
+						if (hasKey) {
+							pippinSaved = true;
+							pippin.active = false;
+							cage.active = false;
+							state = WIN_SCREEN;
+						}
+					}
 				}
+			}
+
+			// Phase 2: go to hut and interact with lasagna.
+			if (streetClearedCars && streetLasagna.active && !streetLasagnaEaten) {
+				streetLasagnaBaseYaw += 90.0f * deltaTime;
+				streetLasagna.yaw = streetLasagnaBaseYaw;
+				streetLasagna.pos.y = streetHut.pos.y + 1.0f + std::sin(glfwGetTime() * 2.0f) * 0.2f;
+
+				const float d = glm::distance(player.pos, streetLasagna.pos);
+				if (d < 3.0f && fJustPressed) {
+					// Start consume animation by shrinking over time.
+					streetLasagna.isHeld = true;
+				}
+				if (streetLasagna.isHeld) {
+					streetLasagna.scale -= glm::vec3(1.0f) * deltaTime * 0.6f;
+					if (streetLasagna.scale.x <= 0.05f) {
+						streetLasagna.active = false;
+						streetLasagnaEaten = true;
+						streetLasagna.isHeld = false;
+						player.health += 50.0f;
+						if (player.health > 100.0f) player.health = 100.0f;
+						// Stay in STREET; this lasagna is just a heal pickup.
+					}
+				}
+			}
 			}
 			else if (state == MEN_LASAGNA) {
 				bool menDead = true;
@@ -605,52 +837,17 @@ int main()
 				for (auto& i : items) if (i.active && i.type == 5) lasagnaEaten = false;
 
 				if (menDead && lasagnaEaten) {
-					state = KEY_PUZZLE;
+					// Maze removed: proceed directly to the boss rescue.
+					state = BOSS_RESCUE;
 					items.clear();
-
-					for (int z = 0; z < 5; z++) {
-						for (int x = -3; x < 3; x++) {
-							if ((x + z) % 2 != 0) {
-								GameObject box; box.pos = glm::vec3(x * 3.0f, 0.5f, -10.0f - z * 3.0f); box.scale = glm::vec3(2.0f); box.active = true; box.type = 4;
-								obstacles.push_back(box);
-							}
-						}
-					}
-
-					GameObject k; k.pos = glm::vec3(0.0f, 0.5f, -30.0f); k.scale = glm::vec3(1.0f); k.active = true; k.type = 6; k.isHeld = false;
+					obstacles.clear();
+					enemies.clear();
+					spawnBoss(glm::vec3(0.0f, 1.5f, -60.0f));
+					GameObject k; k.pos = glm::vec3(0.0f, 0.5f, -70.0f); k.scale = glm::vec3(0.5f); k.active = true; k.type = 7; k.isHeld = false;
 					items.push_back(k);
 				}
 			}
-			else if (state == KEY_PUZZLE) {
-				for (auto& i : items) {
-					if (i.active && i.type == 6) {
-						float d = glm::distance(player.pos, i.pos);
-						if (d < 2.0f && window.isPressed(GLFW_KEY_F)) {
-							i.active = false;
-							state = BOSS_RESCUE;
-							items.clear(); obstacles.clear();
-							spawnBoss(glm::vec3(0.0f, 1.5f, -60.0f));
-							GameObject k; k.pos = glm::vec3(0.0f, 0.5f, -70.0f); k.scale = glm::vec3(0.5f); k.active = true; k.type = 7; k.isHeld = false;
-							items.push_back(k);
-						}
-					}
-				}
-			}
-			else if (state == BOSS_RESCUE) {
-				bool bossDead = true;
-				for (auto& e : enemies) if (e.active && e.type == 3) {
-					bossDead = false;
-					glm::vec3 dir = player.pos - e.pos;
-					float len = std::sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
-					if (len > 0.1f) e.pos += (dir / len) * 2.0f * deltaTime;
-					if (checkCollision(player, e)) player.health -= 20.0f * deltaTime;
-				}
-				if (bossDead) {
-					for (auto& i : items) {
-						if (i.active && i.type == 7 && checkCollision(player, i)) state = GAME_OVER;
-					}
-				}
-			}
+			// KEY_PUZZLE (maze) removed.
 
 			// Collisions
 			for (size_t i = 0; i < enemies.size(); ++i) for (size_t j = i + 1; j < enemies.size(); ++j) resolveOverlap(enemies[i], enemies[j]);
@@ -670,34 +867,11 @@ int main()
 			glm::mat4 Projection = glm::perspective(45.0f, (float)window.getWidth() / (float)window.getHeight(), 0.1f, 1000.0f);
 			glm::mat4 View = glm::lookAt(camera.getCameraPosition(), camera.getCameraPosition() + camera.getCameraViewDirection(), camera.getCameraUp());
 
-			if (state == SEWERS) {
-				waterShader.use();
+			// NOTE: Sewer "water" disabled. We render the sewer floor using the existing rock texture (rock.bmp)
+			// via the regular shader + `terrain` mesh below.
 
-				// 1. Center the water slightly lower (-2.0f) so it doesn't flood the floor
-				glm::mat4 Model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -2.0f, 0.0f));
-
-				// 2. Rotate to lay flat
-				Model = glm::rotate(Model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-				// 3. SCALE: Width 28 (fits in 30 sewer), Length 200 (long tunnel), Height 1
-				// We keep Height (Z here due to rotation) as 1.0f so waves aren't multiplied!
-				Model = glm::scale(Model, glm::vec3(28.0f, 200.0f, 1.0f));
-
-				glm::mat4 MVP = Projection * View * Model;
-
-				glUniformMatrix4fv(glGetUniformLocation(waterShader.getId(), "MVP"), 1, GL_FALSE, &MVP[0][0]);
-				glUniformMatrix4fv(glGetUniformLocation(waterShader.getId(), "model"), 1, GL_FALSE, &Model[0][0]); // Pass model matrix for lighting
-				glUniform1f(glGetUniformLocation(waterShader.getId(), "time"), currentFrame);
-				glUniform3f(glGetUniformLocation(waterShader.getId(), "lightColor"), sunColor.x, sunColor.y, sunColor.z);
-				glUniform3f(glGetUniformLocation(waterShader.getId(), "lightPos"), sunPos.x, sunPos.y, sunPos.z);
-				glUniform3f(glGetUniformLocation(waterShader.getId(), "viewPos"), camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
-
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, t_dirty_water.id);
-				glUniform1i(glGetUniformLocation(waterShader.getId(), "waterTexture"), 0);
-
-				water.draw(waterShader);
-			}
+			const float SEWER_OBJECT_Y = -5.0f;
+			const float SEWER_PLANE_Y = -20.0f;
 
 			shader.use();
 			glUniform3f(glGetUniformLocation(shader.getId(), "lightColor"), sunColor.x, sunColor.y, sunColor.z);
@@ -705,12 +879,14 @@ int main()
 			glm::vec3 camP = camera.getCameraPosition();
 			glUniform3f(glGetUniformLocation(shader.getId(), "viewPos"), camP.x, camP.y, camP.z);
 
-			auto DrawMesh = [&](Mesh& m, glm::vec3 pos, glm::vec3 s, float yaw = 0.0f, bool rotateX = false) {
+			auto DrawMesh = [&](Mesh& m, glm::vec3 pos, glm::vec3 s, float yaw = 0.0f, bool rotateX = false, bool rotateXDoor = false) {
 				glm::mat4 Model = glm::translate(glm::mat4(1.0f), pos);
 				if (yaw != 0.0f) Model = glm::rotate(Model, TO_RAD(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
 
-				// --- FIX: Correct Rotation Logic for the Door ---
+				// General-purpose X rotation for meshes that need it (plane, etc.)
 				if (rotateX) Model = glm::rotate(Model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+				// Dedicated door X rotation path (legacy degrees(-90.0f) behavior)
+				if (rotateXDoor) Model = glm::rotate(Model, glm::degrees(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 				Model = glm::scale(Model, s);
 				glm::mat4 MVP = Projection * View * Model;
@@ -723,19 +899,25 @@ int main()
 			if (!firstPersonView) DrawMesh(catMesh, player.pos, player.scale, playerYaw);
 
 			if (state == SEWERS) {
-				for (auto& w : sewerWalls) if (w.active) DrawMesh(sewerWall, w.pos, w.scale, w.yaw);
-				if (exitDoor.active) DrawMesh(sewerDoorMesh, exitDoor.pos, exitDoor.scale, exitDoor.yaw, true);
+				// Flat sewer floor using rock.bmp (terrain mesh already uses texRock).
+				DrawMesh(terrain, glm::vec3(0.0f, SEWER_PLANE_Y, 0.0f), glm::vec3(28.0f, 1.0f, 200.0f), 0.0f, true);
+				for (auto& w : sewerWalls) if (w.active) { auto p = w.pos; p.y = SEWER_OBJECT_Y; DrawMesh(sewerWall, p, w.scale, w.yaw); }
+				if (exitDoor.active) { auto p = exitDoor.pos; p.y = SEWER_OBJECT_Y; DrawMesh(sewerDoorMesh, p, exitDoor.scale, exitDoor.yaw, false, true); }
 			}
 			else if (state == STREET) {
-				DrawMesh(streetGroundMesh, glm::vec3(0.0f, -0.1f, -100.0f), glm::vec3(5.0f, 1.0f, 100.0f)); // Use plane1.obj as street
-				for (auto& s : scenery) {
-					// Use sewerWall or simple cube as placeholder buildings
-					if (s.type == 101) DrawMesh(sewerWall, s.pos, s.scale);
-					else if (s.type == 102) DrawMesh(sewerWall, s.pos, s.scale);
-					else DrawMesh(sewerWall, s.pos, s.scale);
-				}
-				// Target building
-				DrawMesh(cube, buildingATarget.pos, buildingATarget.scale);
+				DrawMesh(terrain, glm::vec3(0.0f, -5.0f, -40.0f), glm::vec3(15.0f, 1.0f, 60.0f));
+				if (streetHut.active) DrawMesh(hutMesh, streetHut.pos, streetHut.scale, streetHut.yaw);
+				if (streetHut2.active) DrawMesh(hutMesh, streetHut2.pos, streetHut2.scale, streetHut2.yaw);
+				if (streetLasagna.active) DrawMesh(lasagnaMesh, streetLasagna.pos, streetLasagna.scale, streetLasagna.yaw);
+				if (streetKey.active) DrawMesh(keyMesh, streetKey.pos, streetKey.scale, streetKey.yaw);
+				if (cage.active) DrawMesh(cageMesh, cage.pos, cage.scale, cage.yaw);
+				if (pippin.active) DrawMesh(catMesh, pippin.pos, pippin.scale, pippin.yaw);
+			}
+			else if (state == BOSS_RESCUE) {
+				DrawMesh(terrain, glm::vec3(0.0f, -5.0f, -90.0f), glm::vec3(20.0f, 1.0f, 80.0f));
+				if (streetHut2.active) DrawMesh(hutMesh, streetHut2.pos, streetHut2.scale, streetHut2.yaw);
+				if (cage.active) DrawMesh(cageMesh, cage.pos, cage.scale, cage.yaw);
+				if (pippin.active) DrawMesh(catMesh, pippin.pos, pippin.scale, pippin.yaw);
 			}
 			else {
 				DrawMesh(terrain, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 1.0f, 100.0f));
@@ -751,7 +933,7 @@ int main()
 
 			for (auto& o : obstacles) if (o.active) {
 				if (state == KEY_PUZZLE) DrawMesh(boxMesh, o.pos, o.scale);
-				else if (state == STREET) DrawMesh(carMesh, o.pos, o.scale);
+				else if (state == STREET) DrawMesh(carMesh, o.pos, o.scale, o.yaw);
 				else DrawMesh(cube, o.pos, o.scale);
 			}
 
@@ -761,6 +943,7 @@ int main()
 				else if (i.type == 6) DrawMesh(keyMesh, i.pos, i.scale);
 				else DrawMesh(cube, i.pos, i.scale);
 			}
+			// rescueCat removed
 		}
 
 		ImGui::Render();

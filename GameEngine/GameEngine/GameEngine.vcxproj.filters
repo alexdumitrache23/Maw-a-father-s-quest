@@ -143,6 +143,15 @@
     <Image Include="Resources\Textures\sewer_walls.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Resources\Textures\car.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Textures\rock1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Textures\sky.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Object Include="Resources\Models\sphere.obj" />

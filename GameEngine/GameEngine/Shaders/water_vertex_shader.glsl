@@ -12,50 +12,27 @@ uniform mat4 model;
 uniform mat4 MVP;
 uniform float time;
 
-// We need to calculate not just height, but the "slope" (derivative)
-// to make the lighting look real.
-void calculateWave(vec2 direction, float amplitude, float frequency, float speed, vec3 currentPos, inout float height, inout vec2 slope) {
-    float phase = dot(direction, currentPos.xz) * frequency + time * speed;
-    
-    // The height is the Sine wave
-    height += amplitude * sin(phase);
-
-    // The Slope is the Cosine (derivative of sine)
-    // This tells us which way the water is tilting
-    float derivative = amplitude * frequency * cos(phase);
-    slope.x += direction.x * derivative;
-    slope.y += direction.y * derivative;
-}
-
 void main()
 {
     vec3 pos = aPos;
-    float totalHeight = 0.0;
-    vec2 totalSlope = vec2(0.0, 0.0);
 
-    // --- WAVE SETTINGS ---
-    // notice amplitudes (2nd number) are much smaller now (0.05 instead of 0.5)
-    // This makes it look like liquid, not jagged spikes.
-    calculateWave(normalize(vec2(1.0, 0.5)), 0.15, 0.8, 1.5, pos, totalHeight, totalSlope);
-    calculateWave(normalize(vec2(-0.7, 0.7)), 0.10, 1.2, 1.0, pos, totalHeight, totalSlope);
-    calculateWave(normalize(vec2(0.2, 1.0)), 0.05, 2.5, 2.5, pos, totalHeight, totalSlope);
+    // Gentle, stable wave displacement in OBJECT space.
+    // Keeping amplitudes small prevents extreme derivatives / sparkling.
+    float wave = 0.0;
+    wave += sin(pos.x * 0.35 + time * 1.2) * 0.06;
+    wave += sin(pos.z * 0.25 + time * 0.9) * 0.04;
+    wave += sin((pos.x + pos.z) * 0.20 + time * 0.6) * 0.03;
+    pos.y += wave;
+    WaterHeight = wave;
 
-    // Soften edges logic (same as before)
-    float distX = min(aTexCoords.x, 1.0 - aTexCoords.x);
-    float distZ = min(aTexCoords.y, 1.0 - aTexCoords.y);
-    float edgeFactor = smoothstep(0.0, 0.1, min(distX, distZ));
-    
-    pos.y = totalHeight * edgeFactor;
-    WaterHeight = pos.y; 
-
+    // World-space position for lighting.
     FragPos = vec3(model * vec4(pos, 1.0));
 
-    // --- RECALCULATE NORMAL ---
-    // Instead of hardcoding (0,1,0), we calculate the actual tilt
-    // using the slope we summed up earlier.
-    vec3 newNormal = vec3(-totalSlope.x * edgeFactor, 1.0, -totalSlope.y * edgeFactor);
-    Normal = normalize(mat3(transpose(inverse(model))) * newNormal);
+    // Stable normal (world-space up). This is intentionally simple/robust.
+    // (Wave lighting still looks good because fragment shader adds spec/Fresnel.)
+    Normal = normalize(mat3(model) * vec3(0.0, 1.0, 0.0));
 
-    TexCoords = aTexCoords;
+    // Tile the texture a bit so scaling the plane doesn't stretch the pattern.
+    TexCoords = aTexCoords * 8.0;
     gl_Position = MVP * vec4(pos, 1.0);
 }
